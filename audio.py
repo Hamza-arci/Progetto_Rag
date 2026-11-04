@@ -14,13 +14,16 @@ def ascolta():
     # Usiamo il microfono di default del sistema come sorgente audio
     with sr.Microphone() as source:
         print("Calibrazione del rumore di fondo (2 secondi)...")
-        # Aumentiamo a 2 secondi per una lettura più precisa dell'ambiente
+        # Questa riga "ascolta" la stanza e imposta la soglia perfetta in automatico
         recognizer.adjust_for_ambient_noise(source, duration=2)
 
-        # Parametri di ottimizzazione
+        # Assicurati che l'adattamento dinamico sia attivo
         recognizer.dynamic_energy_threshold = True
-        recognizer.energy_threshold = 400  # Alza il valore se registra anche i respiri/rumori, abbassalo se non ti sente
-        recognizer.pause_threshold = 2.0   # Aspetta 1.2 secondi di silenzio prima di considerare finita la frase
+
+        # RIMOSSA la riga recognizer.energy_threshold = ...
+
+        # Abbassa leggermente la pausa richiesta per chiudere la frase
+        recognizer.pause_threshold = 1.5
 
         print("Dimmi qualcosa, ti ascolto...")
         audio = recognizer.listen(source)
